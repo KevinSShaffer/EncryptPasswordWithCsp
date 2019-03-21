@@ -18,22 +18,24 @@ namespace EncryptPasswordWithCsp
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Type in your password");
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine("Type in your password");
 
-            string password = Console.ReadLine();
+                string password = Console.ReadLine();
 
-            Console.Clear();
+                Console.Clear();
 
-            byte[] encodedPassword = Encoding.UTF8.GetBytes(password);
-            byte[] encryptedPassword = EncrypyData(encodedPassword);
-            string base64EncryptedPassword = Convert.ToBase64String(encryptedPassword);
+                byte[] encodedPassword = Encoding.UTF8.GetBytes(password);
+                byte[] encryptedPassword = EncrypyData(encodedPassword);
 
-            File.WriteAllText(filePath, base64EncryptedPassword);
+                File.WriteAllText(filePath, Convert.ToBase64String(encryptedPassword));
 
-            Console.WriteLine("Encrypted password written to file as a base 64 string.");
-            Console.ReadKey();
+                Console.WriteLine("Encrypted password written to file as a base 64 string.");
+                Console.ReadKey();
+            }
 
-            base64EncryptedPassword = File.ReadAllText(filePath);
+            string base64EncryptedPassword = File.ReadAllText(filePath);
             byte[] decryptedPassword = DecryptData(Convert.FromBase64String(base64EncryptedPassword));
             string decodedPassword = Encoding.UTF8.GetString(decryptedPassword);
 
